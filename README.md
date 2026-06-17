@@ -35,13 +35,18 @@ Welcome to my daily Next.js learning repository! This repo tracks my step-by-ste
 
 ### 🟧 Day 4: Next.js MVC (Model-View-Controller) Architecture
 * **Concepts Learned:**
-  * **Architecture Refactoring:** Organizing Next.js code to mimic the clean **MERN MVC** structure.
-  * **Separation of Concerns:**
-    * **Model Layer (`lib/models`):** Storing Mongoose database schemas.
-    * **Controller Layer (`lib/controllers`):** Separating core business logic and database queries from route handlers.
-    * **Router Layer (`app/api`):** Slim route handlers that simply delegate requests to the appropriate controllers.
-    * **View Layer (`app/page.js`):** Client-side interactive UI components.
-  * **Cleaner API Code:** Writing modular API endpoints that are easy to maintain, scale, and test.
+  * Cleaner API Code: Writing modular API endpoints that are easy to maintain, scale, and test.
+
+---
+
+### 🟪 Day 5: Next.js Navigation Hooks & Redirects
+* **Concepts Learned:**
+  * **`usePathname` Hook:** Client-side hook for tracking the active path and building active links/indicators in navbars/sidebars.
+  * **`useSearchParams` Hook:** Client-side hook for retrieving URL search/query parameters (e.g. `?tab=settings`, `?product=1`, or checking redirect errors like `?error=deprecated`).
+  * **`useParams` Hook:** Client-side hook for reading dynamic route parameters (e.g., retrieving `id` from `[id]/page.jsx` or `slug` from `[slug]/page.jsx`).
+  * **`useRouter` Hook:** Client-side hook for programmatic navigation (e.g., `router.push()`, `router.replace()`, `router.refresh()`, `router.back()`).
+  * **`redirect()` Function:** Used for instant redirect redirection during both server and client rendering phases.
+  * **Prerender Suspense Boundaries:** Discovered why client components utilizing `useSearchParams()` must be wrapped in a React `<Suspense>` boundary during static generation/prerendering.
 
 ---
 
@@ -65,14 +70,29 @@ Nextjs learrning/
 │   │   ├── api/notes/         # Route Handlers
 │   │   └── lib/               # Database and Models
 │
-└── day-4/                     # Clean MVC Architecture Refactor
-    ├── lib/
-    │   ├── db.js              # Database connection
-    │   ├── models/            # Mongoose Schemas (Models)
-    │   └── controllers/       # Business Logic Functions (Controllers)
-    └── app/
-        ├── api/notes/         # Router calling the Controller
-        └── page.js            # Frontend View (UI)
+├── day-4/                     # Clean MVC Architecture Refactor
+│   ├── lib/
+│   │   ├── db.js              # Database connection
+│   │   ├── models/            # Mongoose Schemas (Models)
+│   │   └── controllers/       # Business Logic Functions (Controllers)
+│   └── app/
+│       ├── api/notes/         # Router calling the Controller
+│       └── page.js            # Frontend View (UI)
+│
+└── day-5/                     # Navigation Hooks & Redirects Practice
+    ├── app/
+    │   ├── components/
+    │   │   └── slidebar.jsx   # Sidebar using usePathname
+    │   └── shop/
+    │       ├── page.jsx       # Server component redirect('/shop/products')
+    │       ├── Dashboard/     # useSearchParams tab filter wrapped in Suspense
+    │       ├── orders/        # useSearchParams checkout receipt wrapped in Suspense
+    │       ├── products/
+    │       │   ├── page.jsx   # useRouter programmatic navigation
+    │       │   └── [id]/      # useParams, useRouter, redirect action log dashboard
+    │       └── categories/
+    │           ├── page.jsx   # Category listing utilizing searchParams
+    │           └── [slug]/    # useParams dynamic slug, redirect('deprecated')
 ```
 
 ---
