@@ -50,6 +50,17 @@ Welcome to my daily Next.js learning repository! This repo tracks my step-by-ste
 
 ---
 
+### 🟥 Day 6: Server Actions & Modern Form Handling
+* **Concepts Learned:**
+  * **Server Actions (`"use server"`):** Defining asynchronous functions that execute strictly on the server, removing the need for manual API routes to perform operations like database creation/updates.
+  - **React 19 Form Hooks (`useActionState`, `useTransition`):** Managing pending states, spinners, and structured success/error notifications inline without manual state trackers.
+  - **Cache Revalidation (`revalidatePath`):** Informing Next.js to purge route cache on the server, triggering automatic UI updates in components without page reloads.
+  - **JSON Serialization Limits:** Solving Next.js's serialization restrictions on Server-to-Client boundary calls by converting Mongoose ObjectIds (`_id.toString()`) and Dates (`toISOString()`) into plain JSON-serializable types.
+  - **Dynamic Admin Dashboard:** Building robust administrative pages using combined Server Component data fetching and interactive Client Component filters.
+
+---
+
+
 ## 📂 Master Directory Structure
 
 Here is how the project workspace is structured:
@@ -93,6 +104,21 @@ Nextjs learrning/
     │       └── categories/
     │           ├── page.jsx   # Category listing utilizing searchParams
     │           └── [slug]/    # useParams dynamic slug, redirect('deprecated')
+│
+└── day-6/                     # Next.js Server Actions Practice
+    ├── actions/
+    │   └── action.js          # Server Actions (formHandler, getFormsData, updateStatus)
+    ├── app/
+    │   ├── dashboard/
+    │   │   └── page.jsx       # Server Component fetching data and passing to client
+    │   ├── lib/
+    │   │   ├── database.js    # Mongoose database connector
+    │   │   └── models/
+    │   │       └── form.models.js # Form Schema containing status and createdAt
+    │   └── page.js            # Home Page rendering ContactForm
+    └── components/
+        ├── contact-form.jsx   # Glassmorphic client form using useActionState
+        └── dashboard-client.jsx # Admin panel shell with search, status filters, transitions
 ```
 
 ---
