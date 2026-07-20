@@ -85,6 +85,17 @@ Welcome to my daily Next.js learning repository! This repo tracks my step-by-ste
 
 ---
 
+### 🔐 Day 10: Complete Authentication with Better Auth, Prisma 7 & OAuth
+* **Concepts Learned:**
+  * **Better Auth Setup (`lib/auth.ts`, `lib/auth-client.ts`):** Modern authentication engine setup for Next.js App Router with React Client hooks (`authClient.useSession`, `authClient.signOut`).
+  * **OAuth Social Authentication:** Full Google (`google`) and GitHub (`github`) social sign-in integration with callback routing (`/dashboard`).
+  * **Prisma 7 & Neon PostgreSQL Adapter (`lib/prisma.ts`):** Utilizing `@prisma/adapter-pg` driver adapter with `pg` connection pooling to map `User`, `Session`, `Account`, and `Verification` schema models.
+  * **Catch-All Auth API Routes (`app/api/auth/[...all]/route.ts`):** Next.js route handler integrating Better Auth handlers via `toNextJsHandler`.
+  * **Protected Dashboard & Server Guards (`app/dashboard/page.tsx`):** Route protection checking server-side session (`auth.api.getSession`) with automatic `/login` redirects.
+  * **UI & Toast Notifications:** Interactive login form styled with Tailwind CSS, ambient glow effects, and Sonner toast notifications.
+
+---
+
 ## 📂 Master Directory Structure
 
 Here is how the project workspace is structured:
@@ -99,19 +110,23 @@ Nextjs learrning/
 ├── day-6/                     # Next.js Server Actions Practice
 ├── day-7/                     # TanStack Query & Zustand Todo App
 ├── day-8/                     # Complete Posts CRUD with Prisma ORM
-└── day-9/                     # User Cards Studio with Drizzle ORM & TanStack Query
-    ├── actions/
-    │   └── userActions.ts     # Server Actions (getUsers, getUserById, createUser, updateUser, deleteUser)
+├── day-9/                     # User Cards Studio with Drizzle ORM & TanStack Query
+└── day-10/                    # Better Auth + OAuth (Google & GitHub) + Prisma 7
     ├── app/
-    │   ├── layout.tsx         # Root Layout with hydration warning suppression
-    │   ├── providers.tsx      # TanStack QueryClientProvider
-    │   ├── page.tsx           # Studio Dashboard & Active Deck Grid
-    │   └── users/[id]/
-    │       └── page.tsx       # Standalone inspection, edit & delete page
+    │   ├── api/auth/[...all]/ # Better Auth Catch-All API Handler
+    │   ├── dashboard/         # Protected Dashboard Route (Session Guarded)
+    │   ├── login/             # Login Page Component
+    │   ├── layout.tsx         # Root Layout with Sonner Toaster
+    │   └── page.tsx           # Home Route with Session Check
+    ├── components/
+    │   ├── home.jsx           # User Profile View & Logout Button
+    │   └── login-form.tsx     # Google & GitHub OAuth Social Sign-In Form
     ├── lib/
-    │   └── db.ts              # Neon SQL client + Drizzle ORM instance
-    └── schema/
-        └── drizzle.ts         # Table schema (users with role, bio, avatarColor)
+    │   ├── auth.ts            # Better Auth Server Configuration
+    │   ├── auth-client.ts     # Better Auth Client Initialization
+    │   └── prisma.ts          # Prisma 7 Client + `@prisma/adapter-pg` Pool
+    └── prisma/
+        └── schema.prisma      # Models: User, Session, Account, Verification
 ```
 
 ---
@@ -121,7 +136,7 @@ Nextjs learrning/
 To run a specific day's application, navigate into its folder and start the development server:
 
 ```bash
-cd day-9
+cd day-10
 npm install
 npm run dev
 ```
