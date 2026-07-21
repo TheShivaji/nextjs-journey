@@ -1,17 +1,24 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+
 import { redirect } from "next/navigation";
 import Homeview from "@/components/home";
+import { requireAuth } from "@/lib/auth.until";
+import { prisma } from "@/lib/prisma";
 
 export default async function Home() {
+  const session = await requireAuth();
 
-  const session = await auth.api.getSession({
-    headers: await headers()
-  })
-  if (!session) redirect("/login")
+  if (!session) redirect("/login");
+
+  const dbUser = await prisma.user.findUnique({
+    where: { id: session.user.id }
+  });
+
+  const plan = dbUser?.plan || "FREE";
+
   return (
     <div>
-      <Homeview/>
+      <Homeview plan={plan} />
     </div>
   );
 }
+
