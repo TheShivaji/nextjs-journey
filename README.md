@@ -85,14 +85,17 @@ Welcome to my daily Next.js learning repository! This repo tracks my step-by-ste
 
 ---
 
-### 🔐 Day 10: Complete Authentication with Better Auth, Prisma 7 & OAuth
+### 🔐 Day 10: Better Auth + Stripe Subscriptions & Billing Flow
 * **Concepts Learned:**
-  * **Better Auth Setup (`lib/auth.ts`, `lib/auth-client.ts`):** Modern authentication engine setup for Next.js App Router with React Client hooks (`authClient.useSession`, `authClient.signOut`).
-  * **OAuth Social Authentication:** Full Google (`google`) and GitHub (`github`) social sign-in integration with callback routing (`/dashboard`).
-  * **Prisma 7 & Neon PostgreSQL Adapter (`lib/prisma.ts`):** Utilizing `@prisma/adapter-pg` driver adapter with `pg` connection pooling to map `User`, `Session`, `Account`, and `Verification` schema models.
-  * **Catch-All Auth API Routes (`app/api/auth/[...all]/route.ts`):** Next.js route handler integrating Better Auth handlers via `toNextJsHandler`.
-  * **Protected Dashboard & Server Guards (`app/dashboard/page.tsx`):** Route protection checking server-side session (`auth.api.getSession`) with automatic `/login` redirects.
-  * **UI & Toast Notifications:** Interactive login form styled with Tailwind CSS, ambient glow effects, and Sonner toast notifications.
+  * **Better Auth Integration (`lib/auth.ts`, `lib/auth-client.ts`):** Implementing complete email/password and social login (Google & GitHub) authentication.
+  * **Prisma 7 & Neon PostgreSQL:** Syncing User model with standard Auth tables and subscription attributes (`stripeCustomerId`, `stripeSubscriptionId`, `stripePriceId`, etc.).
+  * **Stripe Checkout Sessions (`app/api/stripe/checkout`):** Creating a customer Stripe profile on-the-fly and directing users to a secure checkout portal.
+  * **Robust Stripe Webhooks (`app/api/stripe/webhook`):** Building a resilient, signed webhook receiver to process Stripe events:
+    * `checkout.session.completed` ➔ Upgrades user to premium plan and links subscription profiles.
+    * `customer.subscription.updated` ➔ Synchronizes subscription changes (renewals/tier updates) directly from Stripe.
+    * `customer.subscription.deleted` ➔ Resets user access back to the free tier upon cancellation.
+  * **Customer Billing Portal (`app/api/stripe/portal`):** Allowing users to instantly view, modify, or cancel their active plans directly inside their dashboard via Stripe's self-serve portal.
+  * **Stripe CLI Local Testing:** Setting up port forwarding and generating trigger events (`stripe trigger`) with metadata overrides.
 
 ---
 
@@ -111,20 +114,29 @@ Nextjs learrning/
 ├── day-7/                     # TanStack Query & Zustand Todo App
 ├── day-8/                     # Complete Posts CRUD with Prisma ORM
 ├── day-9/                     # User Cards Studio with Drizzle ORM & TanStack Query
-└── day-10/                    # Better Auth + OAuth (Google & GitHub) + Prisma 7
+└── day-10/                    # Better Auth + Stripe Subscriptions + Prisma 7
     ├── app/
-    │   ├── api/auth/[...all]/ # Better Auth Catch-All API Handler
+    │   ├── api/
+    │   │   ├── auth/[...all]/ # Better Auth Catch-All Handler
+    │   │   └── stripe/
+    │   │       ├── checkout/  # Checkout session generator
+    │   │       ├── portal/    # Billing customer portal router
+    │   │       └── webhook/   # Stripe signature verifier & database synchronizer
     │   ├── dashboard/         # Protected Dashboard Route (Session Guarded)
     │   ├── login/             # Login Page Component
+    │   ├── payment-plan/      # Pricing plans UI selection page
+    │   ├── success/           # Checkout completion success target page
     │   ├── layout.tsx         # Root Layout with Sonner Toaster
     │   └── page.tsx           # Home Route with Session Check
     ├── components/
     │   ├── home.jsx           # User Profile View & Logout Button
-    │   └── login-form.tsx     # Google & GitHub OAuth Social Sign-In Form
+    │   ├── login-form.tsx     # Google & GitHub OAuth Social Sign-In Form
+    │   └── pricing-cards.tsx  # Dynamic pricing subscription checkout card layout
     ├── lib/
     │   ├── auth.ts            # Better Auth Server Configuration
     │   ├── auth-client.ts     # Better Auth Client Initialization
-    │   └── prisma.ts          # Prisma 7 Client + `@prisma/adapter-pg` Pool
+    │   ├── prisma.ts          # Prisma 7 Client + Adapter Setup
+    │   └── stripe.ts          # Stripe client constructor and Price ID mappings
     └── prisma/
         └── schema.prisma      # Models: User, Session, Account, Verification
 ```
